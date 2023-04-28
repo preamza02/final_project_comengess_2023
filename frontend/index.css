@@ -64,6 +64,28 @@
     min-height: 80vh;
 }
 
+.course-button {
+    width: 80%;
+    border-radius: 8px;
+    font-size: 18px;
+    border-width: 0;
+    cursor: pointer;
+    padding-left: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    align-items: center;
+}
+
+.course-button > img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
 .year-display {
     background-color: #81C3EA;
     padding-left: 12px;
