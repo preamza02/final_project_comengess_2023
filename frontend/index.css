@@ -10,7 +10,7 @@
 
 .hidden {
     display: none !important;
-} 
+}
 
 .root {
     width: 90vw;
@@ -51,4 +51,23 @@
     margin-right: 16px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.main-container {
+    width: 100%;
+    min-height: 80vh;
+}
+
+.course-selector {
+    background-color: #D9D9D9;
+    width: 30%;
+    min-height: 80vh;
+}
+
+.year-display {
+    background-color: #81C3EA;
+    padding-left: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 24px;
 }
