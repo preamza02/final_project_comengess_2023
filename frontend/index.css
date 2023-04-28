@@ -100,7 +100,13 @@
     padding: 20px;
 }
 
-.course-title{
+.predict-your-score-text {
+    font-size: 18px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.course-title {
     width: 100%;
     font-size: 24px;
     background-color: #D9D9D9;
@@ -110,9 +116,29 @@
     padding-bottom: 8px;
 }
 
-.course-title > img{
+.course-title>img {
     width: 36px;
     height: 36px;
     background-color: #D9D9D9;
     margin-right: 16px;
+}
+
+.score-item{
+    font-size: 20px;
+    background-color: #D9D9D9;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 28px;
+    padding-right: 10px;
+}
+
+.score-item-input > input{
+    align-items: center;
+    width: 56px;
+    font-size: 20px;
+    border-width: 0;
+    border-radius: 0;
+    margin-right: 8px;
 }
