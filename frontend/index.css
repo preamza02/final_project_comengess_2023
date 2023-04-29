@@ -67,7 +67,7 @@
 
 .course-selector {
     background-color: #D9D9D9;
-    width: 30%;
+    width: 25%;
     height: 100%;
     overflow-y: auto;
 }
@@ -103,9 +103,9 @@
 }
 
 .predict-score-view {
-    flex-grow: 1;
+    width: 75%;
     background-color: white;
-    padding-left: 10px;
+    padding-left: 24px;
     padding-top: 10px;
 }
 
@@ -157,6 +157,7 @@
 }
 
 .save-button {
+    background-color: #D9D9D9;
     width: fit-content;
     cursor: pointer;
     font-size: 20px;
@@ -194,4 +195,15 @@
     color: #FCA404;
 }
 
-.total-score-view {}
+.total-score-view {
+    width: 75%;
+    background-color: white;
+    padding-left: 24px;
+    padding-top: 10px;
+}
+
+.calculation-grade-text{
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 32px;
+}
