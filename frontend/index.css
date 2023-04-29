@@ -33,12 +33,14 @@
     align-items: center;
 }
 
-.top-bar-text {
+.top-bar-button {
     background-color: white;
+    border: 0;
+    cursor: pointer;
+    text-align: center;
     font-size: 18px;
     height: fit-content;
-    padding-left: 20px;
-    padding-right: 20px;
+    width: 160px;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-left: 16px;
@@ -102,9 +104,10 @@
 }
 
 .predict-score-view {
-    width: 70%;
+    flex-grow: 1;
     background-color: white;
-    padding: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
 }
 
 .predict-your-score-text {
@@ -114,7 +117,6 @@
 }
 
 .course-title {
-    width: 100%;
     font-size: 24px;
     background-color: #D9D9D9;
     align-items: center;

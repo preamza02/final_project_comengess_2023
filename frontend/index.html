@@ -10,7 +10,11 @@
       <div class="flex-row header">Guess my Score</div>
 
       <div class="flex-row top-bar">
-        <div class="top-bar-text">My Score</div>
+        <div class="flex-row">
+          <button id="my-score-button" class="top-bar-button">My Score</button>
+          <button id="total-score-button" class="top-bar-button">Total Score</button>
+        </div>
+
         <button class="logout-button">Log Out</button>
       </div>
 
@@ -25,7 +29,7 @@
           </button>
         </div>
 
-        <div class="flex-col predict-score-view">
+        <div id="my-score-view" class="flex-col predict-score-view">
           <div class="flex-row course-title">
             <img src="images/globe_icon.png" alt="globe" />
             Course 1
@@ -70,7 +74,7 @@
         </div>
 
         <!-- TODO: edit another page view with div below (and set hidden until user go to that page) -->
-        <div></div>
+        <div id="total-score-view"></div>
       </div>
     </div>
 
