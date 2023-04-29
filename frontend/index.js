@@ -8,14 +8,14 @@ const MY_SCORE_VIEW = "MY_SCORE";
 const TOTAL_SCORE_VIEW = "TOTAL_SCORE";
 const setView = (view) => {
   if (view === MY_SCORE_VIEW) {
-    myScoreView.classList.remove("hidden");
+    myScoreView.style.removeProperty("display");
     myScoreButton.style.borderWidth = "2px";
-    totalScoreView.classList.add("hidden");
+    totalScoreView.style.display = "none";
     totalScoreButton.style.borderWidth = "0";
   } else if (view === TOTAL_SCORE_VIEW) {
-    myScoreView.classList.add("hidden");
+    myScoreView.style.display = "none";
     myScoreButton.style.borderWidth = "0";
-    totalScoreView.classList.remove("hidden");
+    totalScoreView.style.removeProperty("display");
     totalScoreButton.style.borderWidth = "2px";
   } else {
     throw Error("Unknown view: " + view);

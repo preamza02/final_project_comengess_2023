@@ -8,10 +8,6 @@
     flex-direction: column;
 }
 
-.hidden {
-    display: none !important;
-}
-
 .root {
     width: 90vw;
     overflow-y: visible;
