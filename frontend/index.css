@@ -33,9 +33,12 @@
     align-items: center;
 }
 
+.top-bar-button-container{
+    align-items: center;
+}
+
 .top-bar-button {
     background-color: white;
-    border: 0;
     cursor: pointer;
     text-align: center;
     font-size: 18px;
