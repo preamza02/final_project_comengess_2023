@@ -104,13 +104,13 @@
 .predict-score-view {
     width: 70%;
     background-color: white;
-    padding: 20px;
+    padding: 10px;
 }
 
 .predict-your-score-text {
-    font-size: 18px;
-    margin-top: 32px;
-    margin-bottom: 32px;
+    font-size: 20px;
+    margin-top: 24px;
+    margin-bottom: 12px;
 }
 
 .course-title {
@@ -130,13 +130,18 @@
     margin-right: 16px;
 }
 
+.score-item-list {
+    height: 56%;
+    overflow-y: auto;
+}
+
 .score-item {
     font-size: 20px;
     background-color: #D9D9D9;
     justify-content: space-between;
     align-items: center;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 28px;
     padding-right: 10px;
 }
@@ -148,4 +153,25 @@
     border-width: 0;
     border-radius: 0;
     margin-right: 8px;
+}
+
+.score-calculation-text {
+    font-size: 22px;
+    margin-top: 8px;
+}
+
+.score-calculation-text > input {
+    background-color: #D9D9D9;
+    font-size: 18px;
+    width: 32px;
+    border-width: 0;
+    border-radius: 8px;
+    margin-left: 8px;
+    margin-right: 4px;
+}
+
+.orange-text {
+    margin-left: 8px;
+    margin-right: 8px;
+    color: #FCA404;
 }
