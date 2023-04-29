@@ -87,6 +87,58 @@
         <!-- TODO: edit another page view with div below (and set hidden until user go to that page) -->
         <div id="total-score-view" class="total-score-view">
           <div class="calculation-grade-text">Calculation Grade</div>
+
+          <div class="flex-col grade-item-list">
+            <div class="flex-row grade-item">
+              <div class="flex-row grade-item-graphics">
+                <button class="grade-item-remove-button">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="Edit / Remove_Minus_Circle">
+                      <path
+                        id="Vector"
+                        d="M8 12H16M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z"
+                        stroke="#000000"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </g>
+                  </svg>
+                </button>
+
+                <img src="images/globe_icon.png" alt="globe" />
+
+                Course 1
+              </div>
+
+              <div class="flex-row grade-item-input">
+                <div class="orange-text">20</div>
+                % / 100% Grade:
+                <input type="number" />
+                Credit:
+                <input type="number" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-row save-button-container">
+            <button class="save-button">Save</button>
+          </div>
+
+          <div class="flex-col">
+            <div class="flex-row congratulations-text">
+              <div class="party-popper-emoji-text">🎉</div>
+              Congratulations!
+            </div>
+            <div class="flex-row total-grade-text">
+              Your grade is:
+              <div class="orange-text">4.00</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
