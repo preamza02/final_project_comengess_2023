@@ -14,9 +14,15 @@
 
 .root {
     width: 90vw;
+    overflow-y: visible;
     font-family: Arial;
     margin-left: auto;
     margin-right: auto;
+}
+
+.header {
+    font-size: 36px;
+    margin-bottom: 12px;
 }
 
 .top-bar {
@@ -55,13 +61,14 @@
 
 .main-container {
     width: 100%;
-    min-height: 80vh;
+    height: 80.5vh;
 }
 
 .course-selector {
     background-color: #D9D9D9;
     width: 30%;
-    min-height: 80vh;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .course-button {
@@ -123,7 +130,7 @@
     margin-right: 16px;
 }
 
-.score-item{
+.score-item {
     font-size: 20px;
     background-color: #D9D9D9;
     justify-content: space-between;
@@ -134,7 +141,7 @@
     padding-right: 10px;
 }
 
-.score-item-input > input{
+.score-item-input>input {
     align-items: center;
     width: 56px;
     font-size: 20px;
