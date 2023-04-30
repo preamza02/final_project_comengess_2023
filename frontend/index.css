@@ -91,12 +91,23 @@ input {
     margin-right: auto;
     background-color: white;
     align-items: center;
+    justify-content: space-between
 }
 
 .course-button>img {
     width: 20px;
     height: 20px;
-    margin-right: 5px;
+    margin-right: 10px;
+}
+
+.course-button-left {
+    padding-left: 10px;
+}
+
+.course-button-left>img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 
 .year-display {
@@ -251,7 +262,7 @@ input {
     margin-right: 8px;
 }
 
-.grade-item-remove-button>svg {
+.grade-item-remove-button>img {
     width: 24px;
     height: 24px;
 }
