@@ -191,7 +191,7 @@ const targetScoreInput = document.getElementById("target-score-input");
 const neededUncheckedScore = document.getElementById("needed-unchecked-score");
 // perform calculations every time target score changes
 targetScoreInput.oninput = () => calculateMyScore();
-const calculateMyScore = () => {
+const calculateScore = (yearIndex, courseIndex) => {
   let maxScore = 0,
     checkedScoreVal = 0,
     checkedPercentVal = 0,
@@ -199,12 +199,10 @@ const calculateMyScore = () => {
     uncheckedPercentVal = 0;
   for (
     let i = 0;
-    i <
-    courseData[selectedYearIndex].courses[selectedCourseIndex].item_list.length;
+    i < courseData[yearIndex].courses[courseIndex].item_list.length;
     i++
   ) {
-    const item =
-      courseData[selectedYearIndex].courses[selectedCourseIndex].item_list[i];
+    const item = courseData[yearIndex].courses[courseIndex].item_list[i];
     maxScore += item.max_score;
     if (item.score !== 0) {
       checkedScoreVal += item.score;
@@ -214,6 +212,23 @@ const calculateMyScore = () => {
       uncheckedPercentVal += item.percent;
     }
   }
+  return {
+    maxScore,
+    checkedScoreVal,
+    checkedPercentVal,
+    uncheckedScoreVal,
+    uncheckedPercentVal,
+  };
+};
+
+const calculateMyScore = () => {
+  const {
+    maxScore,
+    checkedScoreVal,
+    checkedPercentVal,
+    uncheckedScoreVal,
+    uncheckedPercentVal,
+  } = calculateScore(selectedYearIndex, selectedCourseIndex);
 
   if (uncheckedPercentVal === 0) {
     neededUncheckedScore.textContent = "Infinity";
