@@ -191,10 +191,12 @@ const unmaxCheckedScore = document.getElementById("max-unchecked-score");
 const uncheckedPercent = document.getElementById("unchecked-score-percent");
 const targetScoreInput = document.getElementById("target-score-input");
 const neededUncheckedScore = document.getElementById("needed-unchecked-score");
+const totalGrade = document.getElementById("total-grade");
 // perform calculations every time target score changes
 targetScoreInput.oninput = () => calculateMyScore();
 const calculateScore = (yearIndex, courseIndex) => {
   let maxScore = 0,
+    maxPercentScore = 0,
     checkedScoreVal = 0,
     checkedPercentVal = 0,
     uncheckedScoreVal = 0,
@@ -206,6 +208,7 @@ const calculateScore = (yearIndex, courseIndex) => {
   ) {
     const item = courseData[yearIndex].courses[courseIndex].item_list[i];
     maxScore += item.max_score;
+    maxPercentScore += item.percent;
     if (item.score !== 0) {
       checkedScoreVal += item.score;
       checkedPercentVal += (item.score / item.max_score) * item.percent;
@@ -216,6 +219,7 @@ const calculateScore = (yearIndex, courseIndex) => {
   }
   return {
     maxScore,
+    maxPercentScore,
     checkedScoreVal,
     checkedPercentVal,
     uncheckedScoreVal,
@@ -299,6 +303,23 @@ const setCurrentCourse = (yearIndex, courseIndex) => {
   calculateMyScore();
 };
 
+const calculateGrade = () => {
+  let sum = 0,
+    sumCredit = 0;
+  for (let i = 0; i < courseData.length; i++) {
+    for (let j = 0; j < courseData[i].courses.length; j++) {
+      const course = courseData[i].courses[j];
+      if (course.is_selected) {
+        sum += course.grade * course.credit;
+        sumCredit += course.credit;
+      }
+    }
+  }
+
+  const grade = sumCredit === 0 ? 0 : sum / sumCredit;
+  totalGrade.textContent = round(grade).toLocaleString();
+};
+
 // for total score view
 const setSelectedCourse = (
   yearIndex,
@@ -343,25 +364,47 @@ const setSelectedCourse = (
     inputDiv.classList.add("flex-row", "grade-item-input");
     itemDiv.appendChild(inputDiv);
 
-    const percentScore = document.createElement("div");
-    percentScore.classList.add("orange-text");
-    inputDiv.appendChild(percentScore);
+    const { maxPercentScore, checkedPercentVal } = calculateScore(
+      yearIndex,
+      courseIndex
+    );
+
+    const percentScoreDiv = document.createElement("div");
+    percentScoreDiv.classList.add("orange-text");
+    percentScoreDiv.textContent = round(checkedPercentVal).toLocaleString();
+    inputDiv.appendChild(percentScoreDiv);
 
     inputDiv.append("% / ");
 
-    const maxPercentScore = document.createElement("div");
-    maxPercentScore.classList.add("max-score-text");
-    inputDiv.appendChild(maxPercentScore);
+    const maxPercentScoreDiv = document.createElement("div");
+    maxPercentScoreDiv.classList.add("max-score-text");
+    maxPercentScoreDiv.textContent = round(maxPercentScore).toLocaleString();
+    inputDiv.appendChild(maxPercentScoreDiv);
 
     inputDiv.append("% Grade:");
 
     const gradeInput = document.createElement("input");
+    gradeInput.type = "number";
+    gradeInput.value = item.grade;
+    gradeInput.oninput = () => {
+      let result = parseFloat(gradeInput.value) ?? 0;
+      result = Number.isNaN(result) ? 0 : result;
+      courseData[yearIndex].courses[courseIndex].grade = result;
+      calculateGrade();
+    }
     inputDiv.appendChild(gradeInput);
 
     inputDiv.append("Credit:");
 
     const creditInput = document.createElement("input");
     creditInput.type = "number";
+    creditInput.value = item.credit;
+    creditInput.oninput = () => {
+      let result = parseFloat(creditInput.value) ?? 0;
+      result = Number.isNaN(result) ? 0 : result;
+      courseData[yearIndex].courses[courseIndex].credit = result;
+      calculateGrade();
+    }
     inputDiv.appendChild(creditInput);
   } else {
     myScoreCourseButtons[yearIndex][courseIndex].item.remove();
@@ -424,6 +467,7 @@ const setCourseData = (courses) => {
   console.log(myScoreCourseButtons);
   setCurrentCourse(0, 0);
   calculateMyScore();
+  calculateGrade();
 };
 
 // initialize everything
