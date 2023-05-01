@@ -4,7 +4,8 @@ function get_course_info(req, cv_cid, url) {
       url + cv_cid,
       {
         headers: {
-          Authorization: `Bearer ${req.session.token.access_token}`,
+          // Authorization: `Bearer ${req.session.token.access_token}`,
+          Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`
         },
       },
       (profileRes) => {

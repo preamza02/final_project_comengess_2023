@@ -55,7 +55,7 @@ exports.accessToken = (req, res) => {
         tokenRes.on("end", () => {
           const token = JSON.parse(tokenData);
           req.session.token = token;
-          // console.log(req.session);
+          console.log(req.session);
           if (token) {
             res.writeHead(302, {
               Location: final_des_url,
