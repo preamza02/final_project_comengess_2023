@@ -18,22 +18,25 @@ async function getcou(student_id) {
   return j;
 }
 
+// exports.getStarting = async (req, res) => {
+//   try {
+//     var j = getcou(req.params.student_id)["data"];
+//     if (j == {}) {
+//       j = getPayload(req);
+//     }
+//     res.send(j);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   }
+// };
+
 exports.getStarting = async (req, res) => {
   try {
     var j = getcou(req.params.student_id)["data"];
     if (j == {}) {
       j = getPayload(req);
     }
-    res.send(j);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
-};
-
-exports.getCourses = async (req, res) => {
-  try {
-    var j = getcou(req.params.student_id)["data"];
     res.send(j);
   } catch (err) {
     console.error(err);
