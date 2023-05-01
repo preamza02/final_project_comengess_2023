@@ -187,6 +187,10 @@ const checkedPercent = document.getElementById("checked-score-percent");
 const uncheckedScore = document.getElementById("unchecked-score");
 const unmaxCheckedScore = document.getElementById("max-unchecked-score");
 const uncheckedPercent = document.getElementById("unchecked-score-percent");
+const targetScoreInput = document.getElementById("target-score-input");
+const neededUncheckedScore = document.getElementById("needed-unchecked-score");
+// perform calculations every time target score changes
+targetScoreInput.oninput = () => calculateMyScore();
 const calculateMyScore = () => {
   let maxScore = 0,
     checkedScoreVal = 0,
@@ -210,6 +214,17 @@ const calculateMyScore = () => {
       uncheckedPercentVal += item.percent;
     }
   }
+
+  if (uncheckedPercentVal === 0) {
+    neededUncheckedScore.textContent = "Infinity";
+  } else {
+    let target = parseFloat(targetScoreInput.value) ?? 0;
+    target = Number.isNaN(target) ? 0 : target;
+    const neededPercent =
+      (Math.max(0, target - checkedPercentVal) / uncheckedPercentVal) * 100;
+    neededUncheckedScore.textContent = round(neededPercent).toLocaleString();
+  }
+
   checkedScore.textContent = round(checkedScoreVal).toLocaleString();
   maxCheckedScore.textContent = round(maxScore).toLocaleString();
   checkedPercent.textContent = round(checkedPercentVal).toLocaleString();
@@ -249,7 +264,7 @@ const setCurrentCourse = (yearIndex, courseIndex) => {
     input.type = "number";
     input.value = item.score;
     input.oninput = () => {
-      const result = parseFloat(input.value) ?? 0;
+      let result = parseFloat(input.value) ?? 0;
       result = Number.isNaN(result) ? 0 : result;
       courseData[yearIndex].courses[courseIndex].item_list[i].score = result;
       calculateMyScore();
