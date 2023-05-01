@@ -178,9 +178,11 @@ const setProfile = (profile) => {
 // update course data
 let courseData;
 let myScoreCourseButtons = {};
+let totalScoreComponents = {};
 let selectedYearIndex = -1,
   selectedCourseIndex = -1;
 const scoreItemList = document.getElementById("score-item-list");
+const gradeItemList = document.getElementById("grade-item-list");
 const checkedScore = document.getElementById("checked-score");
 const maxCheckedScore = document.getElementById("max-checked-score");
 const checkedPercent = document.getElementById("checked-score-percent");
@@ -248,6 +250,7 @@ const calculateMyScore = () => {
   uncheckedPercent.textContent = round(uncheckedPercentVal).toLocaleString();
 };
 
+// for my score view
 const setCurrentCourse = (yearIndex, courseIndex) => {
   // hide old outline
   if (selectedCourseIndex >= 0) {
@@ -296,6 +299,76 @@ const setCurrentCourse = (yearIndex, courseIndex) => {
   calculateMyScore();
 };
 
+// for total score view
+const setSelectedCourse = (
+  yearIndex,
+  courseIndex,
+  isSelected,
+  forceSet = false
+) => {
+  if (
+    !forceSet &&
+    courseData[yearIndex].courses[courseIndex].is_selected === isSelected
+  ) {
+    return;
+  }
+
+  if (isSelected) {
+    let item = courseData[yearIndex].courses[courseIndex];
+
+    const itemDiv = document.createElement("div");
+    itemDiv.classList.add("flex-row", "grade-item");
+    gradeItemList.appendChild(itemDiv);
+    myScoreCourseButtons[yearIndex][courseIndex].item = itemDiv;
+
+    const graphics = document.createElement("div");
+    graphics.classList.add("flex-row", "grade-item-graphics");
+    itemDiv.appendChild(graphics);
+
+    const removeButton = document.createElement("button");
+    removeButton.classList.add("grade-item-remove-button");
+    removeButton.innerHTML = '<img alt="" src="images/uncheck.png" />';
+    removeButton.onclick = () =>
+      setSelectedCourse(yearIndex, courseIndex, false);
+    graphics.appendChild(removeButton);
+
+    const globe = document.createElement("img");
+    globe.src = "images/globe_icon.png";
+    globe.alt = "globe";
+    graphics.appendChild(globe);
+
+    graphics.append(item.name);
+
+    const inputDiv = document.createElement("div");
+    inputDiv.classList.add("flex-row", "grade-item-input");
+    itemDiv.appendChild(inputDiv);
+
+    const percentScore = document.createElement("div");
+    percentScore.classList.add("orange-text");
+    inputDiv.appendChild(percentScore);
+
+    inputDiv.append("% / ");
+
+    const maxPercentScore = document.createElement("div");
+    maxPercentScore.classList.add("max-score-text");
+    inputDiv.appendChild(maxPercentScore);
+
+    inputDiv.append("% Grade:");
+
+    const gradeInput = document.createElement("input");
+    inputDiv.appendChild(gradeInput);
+
+    inputDiv.append("Credit:");
+
+    const creditInput = document.createElement("input");
+    creditInput.type = "number";
+    inputDiv.appendChild(creditInput);
+  } else {
+    myScoreCourseButtons[yearIndex][courseIndex].item.remove();
+  }
+  courseData[yearIndex].courses[courseIndex].is_selected = isSelected;
+};
+
 const setCourseData = (courses) => {
   courseData = courses;
   for (let i = 0; i < courses.length; i++) {
@@ -338,6 +411,12 @@ const setCourseData = (courses) => {
               ${course.name}
             </div>
       `;
+      courseButton2.onclick = () => setSelectedCourse(i, j, true);
+      if (!totalScoreComponents[i]) totalScoreComponents[i] = {};
+      if (!totalScoreComponents[i][j]) totalScoreComponents[i][j] = {};
+      totalScoreComponents[i][j].button = courseButton2;
+      if (courseData[i].courses[j].is_selected)
+        setSelectedCourse(i, j, true, true);
       totalScoreCourseSelector.appendChild(courseButton2);
     }
   }

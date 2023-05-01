@@ -82,11 +82,11 @@
 
           <div class="flex-row score-calculation-text">
             Unchecked score:
-            <div id="unchecked-score" class="orange-text">75</div>
+            <div id="unchecked-score" class="orange-text"></div>
             /
-            <div id="max-unchecked-score" class="max-score-text">100</div>
+            <div id="max-unchecked-score" class="max-score-text"></div>
             as
-            <div id="unchecked-score-percent" class="orange-text">75</div>
+            <div id="unchecked-score-percent" class="orange-text"></div>
             %
           </div>
 
@@ -94,7 +94,7 @@
             Target score
             <input id="target-score-input" type="number" />
             %: need to do
-            <div id="needed-unchecked-score" class="orange-text">80</div>
+            <div id="needed-unchecked-score" class="orange-text"></div>
             % of unchecked score
           </div>
         </div>
@@ -103,26 +103,7 @@
         <div id="total-score-view" class="total-score-view">
           <div class="calculation-grade-text">Calculation Grade</div>
 
-          <div class="flex-col grade-item-list">
-            <div class="flex-row grade-item">
-              <div class="flex-row grade-item-graphics">
-                <button class="grade-item-remove-button">
-                  <img alt="" src="images/uncheck.png" />
-                </button>
-
-                <img src="images/globe_icon.png" alt="globe" />
-
-                Course 1
-              </div>
-
-              <div class="flex-row grade-item-input">
-                <div class="orange-text">20</div>
-                % / 100% Grade:
-                <input type="number" />
-                Credit:
-                <input type="number" />
-              </div>
-            </div>
+          <div id="grade-item-list" class="flex-col grade-item-list">
           </div>
 
           <div class="flex-row save-button-container">
