@@ -229,6 +229,11 @@ input {
     color: #FCA404;
 }
 
+.max-score-text {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
 .total-score-view {
     width: 75%;
     background-color: white;

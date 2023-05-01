@@ -72,23 +72,27 @@
 
           <div class="flex-row score-calculation-text">
             Current score:
-            <div class="orange-text">20</div>
-            / 100 as
-            <div class="orange-text">20</div>
+            <div id="checked-score" class="orange-text"></div>
+            /
+            <div id="max-checked-score" class="max-score-text"></div>
+            as
+            <div id="checked-score-percent" class="orange-text"></div>
             %
           </div>
 
           <div class="flex-row score-calculation-text">
             Unchecked score:
-            <div class="orange-text">75</div>
-            / 100 as
-            <div class="orange-text">75</div>
+            <div id="unchecked-score" class="orange-text">75</div>
+            /
+            <div id="max-unchecked-score" class="max-score-text">100</div>
+            as
+            <div id="unchecked-score-percent" class="orange-text">75</div>
             %
           </div>
 
           <div class="flex-row score-calculation-text">
             Target score
-            <input type="number" />
+            <input id="target-score-input" type="number" />
             %: need to do
             <div class="orange-text">80</div>
             % of unchecked score

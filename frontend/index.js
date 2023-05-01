@@ -1,3 +1,5 @@
+const round = (num) => Math.round((num + Number.EPSILON) * 100) / 100;
+
 const myScoreButton = document.getElementById("my-score-button");
 const totalScoreButton = document.getElementById("total-score-button");
 const myScoreView = document.getElementById("my-score-view");
@@ -179,29 +181,89 @@ let myScoreCourseButtons = {};
 let selectedYearIndex = -1,
   selectedCourseIndex = -1;
 const scoreItemList = document.getElementById("score-item-list");
+const checkedScore = document.getElementById("checked-score");
+const maxCheckedScore = document.getElementById("max-checked-score");
+const checkedPercent = document.getElementById("checked-score-percent");
+const uncheckedScore = document.getElementById("unchecked-score");
+const unmaxCheckedScore = document.getElementById("max-unchecked-score");
+const uncheckedPercent = document.getElementById("unchecked-score-percent");
+const calculateMyScore = () => {
+  let maxScore = 0,
+    checkedScoreVal = 0,
+    checkedPercentVal = 0,
+    uncheckedScoreVal = 0,
+    uncheckedPercentVal = 0;
+  for (
+    let i = 0;
+    i <
+    courseData[selectedYearIndex].courses[selectedCourseIndex].item_list.length;
+    i++
+  ) {
+    const item =
+      courseData[selectedYearIndex].courses[selectedCourseIndex].item_list[i];
+    maxScore += item.max_score;
+    if (item.score !== 0) {
+      checkedScoreVal += item.score;
+      checkedPercentVal += (item.score / item.max_score) * item.percent;
+    } else {
+      uncheckedScoreVal += item.max_score;
+      uncheckedPercentVal += item.percent;
+    }
+  }
+  checkedScore.textContent = round(checkedScoreVal).toLocaleString();
+  maxCheckedScore.textContent = round(maxScore).toLocaleString();
+  checkedPercent.textContent = round(checkedPercentVal).toLocaleString();
+  uncheckedScore.textContent = round(uncheckedScoreVal).toLocaleString();
+  unmaxCheckedScore.textContent = round(maxScore).toLocaleString();
+  uncheckedPercent.textContent = round(uncheckedPercentVal).toLocaleString();
+};
+
 const setCurrentCourse = (yearIndex, courseIndex) => {
   // hide old outline
   if (selectedCourseIndex >= 0) {
-    myScoreCourseButtons[selectedYearIndex][selectedCourseIndex].style.outlineWidth =
-      "0";
+    myScoreCourseButtons[selectedYearIndex][
+      selectedCourseIndex
+    ].style.outlineWidth = "0";
   }
   myScoreCourseButtons[yearIndex][courseIndex].style.outlineWidth = "2px";
 
   scoreItemList.innerHTML = ""; // clear children
-  for (let item of courseData[yearIndex].courses[courseIndex].item_list) {
+  for (
+    let i = 0;
+    i < courseData[yearIndex].courses[courseIndex].item_list.length;
+    i++
+  ) {
+    const item = courseData[yearIndex].courses[courseIndex].item_list[i];
     const scoreItem = document.createElement("div");
     scoreItem.classList.add("flex-row", "score-item");
-    scoreItem.innerHTML = `
-      ${item.name}
-      <div class="flex-row score-item-input">
-        <input type="number" />
-        / ${item.max_score} as ${item.percent}%
-      </div>
-  `;
     scoreItemList.appendChild(scoreItem);
+
+    const text = document.createTextNode(item.name);
+    scoreItem.appendChild(text);
+
+    const inputDiv = document.createElement("div");
+    inputDiv.classList.add("flex-row", "score-item-input");
+    scoreItem.appendChild(inputDiv);
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.value = item.score;
+    input.oninput = () => {
+      const result = parseFloat(input.value) ?? 0;
+      result = Number.isNaN(result) ? 0 : result;
+      courseData[yearIndex].courses[courseIndex].item_list[i].score = result;
+      calculateMyScore();
+    };
+    inputDiv.appendChild(input);
+
+    const text2 = document.createTextNode(
+      `/ ${item.max_score} as ${item.percent}%`
+    );
+    inputDiv.appendChild(text2);
   }
   selectedYearIndex = yearIndex;
   selectedCourseIndex = courseIndex;
+  calculateMyScore();
 };
 
 const setCourseData = (courses) => {
@@ -220,7 +282,7 @@ const setCourseData = (courses) => {
     totalScoreCourseSelector.appendChild(year2);
 
     for (let j = 0; j < courses[i].courses.length; j++) {
-      let course = courses[i].courses[j];
+      const course = courses[i].courses[j];
       // for my score
       const courseButton = document.createElement("button");
       courseButton.classList.add("flex-row", "course-button");
@@ -234,7 +296,6 @@ const setCourseData = (courses) => {
       courseButton.onclick = () => setCurrentCourse(i, j);
       if (!myScoreCourseButtons[i]) myScoreCourseButtons[i] = {};
       myScoreCourseButtons[i][j] = courseButton;
-      console.log(myScoreCourseButtons)
       myScoreCourseSelector.appendChild(courseButton);
 
       // for total score
@@ -253,6 +314,7 @@ const setCourseData = (courses) => {
 
   console.log(myScoreCourseButtons);
   setCurrentCourse(0, 0);
+  calculateMyScore();
 };
 
 // initialize everything
