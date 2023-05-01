@@ -9,9 +9,9 @@ const authorization_url = `https://www.mycourseville.com/api/oauth/authorize?res
 const access_token_url = "https://www.mycourseville.com/api/oauth/access_token";
 
 exports.authApp = (req, res) => {
-  console.log(req);
-  console.log(authorization_url);
-  res.redirect(authorization_url);
+    // console.log(req)
+    // console.log(authorization_url)
+    res.redirect(authorization_url);
 };
 
 exports.accessToken = (req, res) => {
@@ -41,24 +41,30 @@ exports.accessToken = (req, res) => {
       },
     };
 
-    const tokenReq = https.request(
-      access_token_url,
-      tokenOptions,
-      (tokenRes) => {
-        let tokenData = "";
-        tokenRes.on("data", (chunk) => {
-          tokenData += chunk;
-        });
-        tokenRes.on("end", () => {
-          const token = JSON.parse(tokenData);
-          req.session.token = token;
-          console.log(req.session);
-          if (token) {
-            res.writeHead(302, {
-              Location: `http://${process.env.frontendIPAddress}/home.html`,
-            });
-            res.end();
-          }
+        const tokenReq = https.request(
+            access_token_url,
+            tokenOptions,
+            (tokenRes) => {
+                let tokenData = "";
+                tokenRes.on("data", (chunk) => {
+                    tokenData += chunk;
+                });
+                tokenRes.on("end", () => {
+                    const token = JSON.parse(tokenData);
+                    req.session.token = token;
+                    // console.log(req.session);
+                    if (token) {
+                        res.writeHead(302, {
+                            Location: `http://${process.env.frontendIPAddress}/home.html`,
+                            // Location: `http://localhost:3000/courseville/profile`,
+                        });
+                        res.end();
+                    }
+                });
+            }
+        );
+        tokenReq.on("error", (err) => {
+            console.error(err);
         });
       }
     );
@@ -79,20 +85,33 @@ exports.logout = (req, res) => {
 };
 
 exports.getProfileInformation = (req, res) => {
-  console.log(req);
-  try {
-    const profileOptions = {
-      headers: {
-        Authorization: `Bearer ${req.session.token.access_token}`,
-      },
-    };
-    const profileReq = https.request(
-      "https://www.mycourseville.com/api/v1/public/users/me",
-      profileOptions,
-      (profileRes) => {
-        let profileData = "";
-        profileRes.on("data", (chunk) => {
-          profileData += chunk;
+    // console.log(req.session.token)
+    // console.log("-----------------------------------------------")
+    try {
+        const profileOptions = {
+            headers: {
+                Authorization: `Bearer ${req.session.token.access_token}`,
+            },
+        };
+        const profileReq = https.request(
+            "https://www.mycourseville.com/api/v1/public/users/me",
+            profileOptions,
+            (profileRes) => {
+                // console.log(req.session.token)
+                let profileData = "";
+                profileRes.on("data", (chunk) => {
+                    profileData += chunk;
+                });
+                profileRes.on("end", () => {
+                    const profile = JSON.parse(profileData);
+                    console.log(profile)
+                    res.send(profile);
+                    res.end();
+                });
+            }
+        );
+        profileReq.on("error", (err) => {
+            console.error(err);
         });
         profileRes.on("end", () => {
           const profile = JSON.parse(profileData);
