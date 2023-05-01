@@ -1,9 +1,10 @@
 const express = require("express");
-const itemController = require("../controller/item_controller");
+const awsController = require("../controller/aws_controller");
 
 const router = express.Router();
 
-router.get("/get_course/:student_id", itemController.getCourses);
-router.post("/put_course/:student_id", itemController.postCourses);
+router.get("/get_course/:student_id", awsController.getCourses);
+router.get("/update_course/:student_id", awsController.postCourses);
+router.post("/put_course/:student_id", awsController.postCourses);
 
 module.exports = router;
