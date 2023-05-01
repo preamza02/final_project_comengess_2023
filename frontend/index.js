@@ -230,6 +230,7 @@ const calculateScore = (yearIndex, courseIndex) => {
 const calculateMyScore = () => {
   const {
     maxScore,
+    maxPercentScore,
     checkedScoreVal,
     checkedPercentVal,
     uncheckedScoreVal,
@@ -244,6 +245,18 @@ const calculateMyScore = () => {
     const neededPercent =
       (Math.max(0, target - checkedPercentVal) / uncheckedPercentVal) * 100;
     neededUncheckedScore.textContent = round(neededPercent).toLocaleString();
+  }
+
+  // update score text in total score view if selected
+  if (
+    myScoreCourseButtons[selectedYearIndex][selectedCourseIndex].percentScore
+  ) {
+    myScoreCourseButtons[selectedYearIndex][
+      selectedCourseIndex
+    ].percentScore.textContent = round(checkedPercentVal).toLocaleString();
+    myScoreCourseButtons[selectedYearIndex][
+      selectedCourseIndex
+    ].maxPercentScore.textContent = round(maxPercentScore).toLocaleString();
   }
 
   checkedScore.textContent = round(checkedScoreVal).toLocaleString();
@@ -372,6 +385,7 @@ const setSelectedCourse = (
     const percentScoreDiv = document.createElement("div");
     percentScoreDiv.classList.add("orange-text");
     percentScoreDiv.textContent = round(checkedPercentVal).toLocaleString();
+    myScoreCourseButtons[yearIndex][courseIndex].percentScore = percentScoreDiv;
     inputDiv.appendChild(percentScoreDiv);
 
     inputDiv.append("% / ");
@@ -379,6 +393,8 @@ const setSelectedCourse = (
     const maxPercentScoreDiv = document.createElement("div");
     maxPercentScoreDiv.classList.add("max-score-text");
     maxPercentScoreDiv.textContent = round(maxPercentScore).toLocaleString();
+    myScoreCourseButtons[yearIndex][courseIndex].maxPercentScore =
+      maxPercentScoreDiv;
     inputDiv.appendChild(maxPercentScoreDiv);
 
     inputDiv.append("% Grade:");
@@ -391,7 +407,7 @@ const setSelectedCourse = (
       result = Number.isNaN(result) ? 0 : result;
       courseData[yearIndex].courses[courseIndex].grade = result;
       calculateGrade();
-    }
+    };
     inputDiv.appendChild(gradeInput);
 
     inputDiv.append("Credit:");
@@ -404,7 +420,7 @@ const setSelectedCourse = (
       result = Number.isNaN(result) ? 0 : result;
       courseData[yearIndex].courses[courseIndex].credit = result;
       calculateGrade();
-    }
+    };
     inputDiv.appendChild(creditInput);
   } else {
     myScoreCourseButtons[yearIndex][courseIndex].item.remove();
