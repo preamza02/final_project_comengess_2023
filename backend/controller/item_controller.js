@@ -77,3 +77,20 @@ function getPayload(req) {
   }
   return payload;
 }
+
+function change_payload_isselect(payload, cv_cid) {
+  for (let i = 0; i < payload.length; i++) {
+    if (payload[i]["cv_cid"] != cv_cid) {
+      payload[i]["is_selected"] = !payload[i]["is_selected"];
+      break;
+    }
+  }
+}
+function change_values(payload, cv_cid, new_values) {
+  for (let i = 0; i < payload.length; i++) {
+    if (payload[i]["cv_cid"] != cv_cid) {
+      payload[i]["is_selected"] = !payload[i]["is_selected"];
+      break;
+    }
+  }
+}

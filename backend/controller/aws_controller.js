@@ -1,6 +1,6 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { PutCommand, ScanCommand } = require("@aws-sdk/lib-dynamodb");
-const { getPayload } = require("./item_conroller");
+const { getPayload } = require("./item_controller");
 const docClient = new DynamoDBClient({ regions: "us-east-1" });
 
 async function getcou(student_id) {

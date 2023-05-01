@@ -5,7 +5,6 @@ const session = require("express-session");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
-const itemsRoutes = require("./router/item_router");
 const awsRoutes = require("./router/aws_router");
 const coursevilleRoutes = require("./router/courseview_router");
 
@@ -32,7 +31,6 @@ app.use(session(sessionOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/items", itemsRoutes);
 app.use("/aws", awsRoutes);
 app.use("/courseville", coursevilleRoutes);
 
