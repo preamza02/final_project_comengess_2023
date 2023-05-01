@@ -1,9 +1,13 @@
-let myScoreButton = document.getElementById("my-score-button");
-let totalScoreButton = document.getElementById("total-score-button");
-let myScoreView = document.getElementById("my-score-view");
-let totalScoreView = document.getElementById("total-score-view");
-
-let courseButtonList = [];
+const myScoreButton = document.getElementById("my-score-button");
+const totalScoreButton = document.getElementById("total-score-button");
+const myScoreView = document.getElementById("my-score-view");
+const totalScoreView = document.getElementById("total-score-view");
+const myScoreCourseSelector = document.getElementById(
+  "my-score-course-selector"
+);
+const totalScoreCourseSelector = document.getElementById(
+  "total-score-course-selector"
+);
 
 // handle navigating between two views
 const MY_SCORE_VIEW = "MY_SCORE";
@@ -11,13 +15,17 @@ const TOTAL_SCORE_VIEW = "TOTAL_SCORE";
 const setView = (view) => {
   if (view === MY_SCORE_VIEW) {
     myScoreView.style.removeProperty("display");
+    myScoreCourseSelector.style.removeProperty("display");
     myScoreButton.style.borderWidth = "2px";
     totalScoreView.style.display = "none";
+    totalScoreCourseSelector.style.display = "none";
     totalScoreButton.style.borderWidth = "0";
   } else if (view === TOTAL_SCORE_VIEW) {
     myScoreView.style.display = "none";
+    myScoreCourseSelector.style.display = "none";
     myScoreButton.style.borderWidth = "0";
     totalScoreView.style.removeProperty("display");
+    totalScoreCourseSelector.style.removeProperty("display");
     totalScoreButton.style.borderWidth = "2px";
   } else {
     throw Error("Unknown view: " + view);
@@ -167,30 +175,53 @@ const setProfile = (profile) => {
 
 // update course data
 let courseData;
-const courseSelector = document.getElementById("course-selector");
+let myScoreCourseButtons = {};
+let selectedYearIndex = -1,
+  selectedCourseIndex = -1;
 const scoreItemList = document.getElementById("score-item-list");
-const setCurrentCourse = (item) => {
-  const scoreItem = document.createElement("div");
-  scoreItem.classList.add("flex-row", "score-item");
-  scoreItem.innerHTML = `
+const setCurrentCourse = (yearIndex, courseIndex) => {
+  // hide old outline
+  if (selectedCourseIndex >= 0) {
+    myScoreCourseButtons[selectedYearIndex][selectedCourseIndex].style.outlineWidth =
+      "0";
+  }
+  myScoreCourseButtons[yearIndex][courseIndex].style.outlineWidth = "2px";
+
+  scoreItemList.innerHTML = ""; // clear children
+  for (let item of courseData[yearIndex].courses[courseIndex].item_list) {
+    const scoreItem = document.createElement("div");
+    scoreItem.classList.add("flex-row", "score-item");
+    scoreItem.innerHTML = `
       ${item.name}
       <div class="flex-row score-item-input">
         <input type="number" />
         / ${item.max_score} as ${item.percent}%
       </div>
   `;
-  scoreItemList.appendChild(scoreItem);
+    scoreItemList.appendChild(scoreItem);
+  }
+  selectedYearIndex = yearIndex;
+  selectedCourseIndex = courseIndex;
 };
 
 const setCourseData = (courses) => {
   courseData = courses;
   for (let i = 0; i < courses.length; i++) {
+    // for my score
     const year = document.createElement("div");
     year.textContent = "Year " + courses[i].year;
     year.classList.add("year-display");
-    courseSelector.appendChild(year);
+    myScoreCourseSelector.appendChild(year);
 
-    for (let course of courses[i].courses) {
+    // for total score
+    const year2 = document.createElement("div");
+    year2.textContent = "Year " + courses[i].year;
+    year2.classList.add("year-display");
+    totalScoreCourseSelector.appendChild(year2);
+
+    for (let j = 0; j < courses[i].courses.length; j++) {
+      let course = courses[i].courses[j];
+      // for my score
       const courseButton = document.createElement("button");
       courseButton.classList.add("flex-row", "course-button");
       courseButton.style.outlineWidth = "0";
@@ -200,24 +231,28 @@ const setCourseData = (courses) => {
               ${course.name}
             </div>
       `;
-      courseButton.onclick = () => {
-        scoreItemList.innerHTML = ""; // clear children
+      courseButton.onclick = () => setCurrentCourse(i, j);
+      if (!myScoreCourseButtons[i]) myScoreCourseButtons[i] = {};
+      myScoreCourseButtons[i][j] = courseButton;
+      console.log(myScoreCourseButtons)
+      myScoreCourseSelector.appendChild(courseButton);
 
-        for (let item of course.item_list) {
-          courseButtonList.forEach(
-            (button) => (button.style.outlineWidth = "0")
-          );
-          courseButton.style.outlineWidth = "2px";
-          setCurrentCourse(item);
-        }
-      };
-      courseButtonList.push(courseButton);
-      courseSelector.appendChild(courseButton);
+      // for total score
+      const courseButton2 = document.createElement("button");
+      courseButton2.classList.add("flex-row", "course-button");
+      courseButton2.style.outlineWidth = "0";
+      courseButton2.innerHTML = `
+            <div class="flex-row course-button-left">
+              <img src="images/globe_icon.png" alt="icon" />
+              ${course.name}
+            </div>
+      `;
+      totalScoreCourseSelector.appendChild(courseButton2);
     }
   }
 
-  courseButtonList[0].style.outlineWidth = "2px";
-  setCurrentCourse(courses[0].courses[0].item_list[0]);
+  console.log(myScoreCourseButtons);
+  setCurrentCourse(0, 0);
 };
 
 // initialize everything
