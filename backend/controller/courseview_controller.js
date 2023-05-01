@@ -9,8 +9,8 @@ const authorization_url = `https://www.mycourseville.com/api/oauth/authorize?res
 const access_token_url = "https://www.mycourseville.com/api/oauth/access_token";
 
 exports.authApp = (req, res) => {
-    console.log(req)
-    console.log(authorization_url)
+    // console.log(req)
+    // console.log(authorization_url)
     res.redirect(authorization_url);
 };
 
@@ -52,10 +52,11 @@ exports.accessToken = (req, res) => {
                 tokenRes.on("end", () => {
                     const token = JSON.parse(tokenData);
                     req.session.token = token;
-                    console.log(req.session);
+                    // console.log(req.session);
                     if (token) {
                         res.writeHead(302, {
                             Location: `http://${process.env.frontendIPAddress}/home.html`,
+                            // Location: `http://localhost:3000/courseville/profile`,
                         });
                         res.end();
                     }
@@ -79,7 +80,8 @@ exports.logout = (req, res) => {
 };
 
 exports.getProfileInformation = (req, res) => {
-    console.log(req)
+    // console.log(req.session.token)
+    // console.log("-----------------------------------------------")
     try {
         const profileOptions = {
             headers: {
@@ -90,12 +92,14 @@ exports.getProfileInformation = (req, res) => {
             "https://www.mycourseville.com/api/v1/public/users/me",
             profileOptions,
             (profileRes) => {
+                // console.log(req.session.token)
                 let profileData = "";
                 profileRes.on("data", (chunk) => {
                     profileData += chunk;
                 });
                 profileRes.on("end", () => {
                     const profile = JSON.parse(profileData);
+                    console.log(profile)
                     res.send(profile);
                     res.end();
                 });
