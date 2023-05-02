@@ -24,6 +24,20 @@ input {
 .header {
     font-size: 36px;
     margin-bottom: 12px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-text {
+    font-size: 14px;
+    text-align: end;
+    margin-right: 12px;
+}
+
+.profile-image {
+    width: 48px;
+    height: 48px;
+    background-size: cover;
 }
 
 .top-bar {
@@ -51,7 +65,7 @@ input {
     border-radius: 10px;
 }
 
-.logout-button {
+.authentication-button {
     background-color: white;
     border-width: 0;
     font-size: 18px;
@@ -75,6 +89,7 @@ input {
     width: 25%;
     height: 100%;
     overflow-y: auto;
+    justify-items: center;
 }
 
 .course-button {
@@ -87,8 +102,11 @@ input {
     padding-top: 10px;
     padding-bottom: 10px;
     margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
+    outline-color: black;
+    outline-style: solid;
     background-color: white;
     align-items: center;
     justify-content: space-between
@@ -211,6 +229,11 @@ input {
     color: #FCA404;
 }
 
+.max-score-text {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
 .total-score-view {
     width: 75%;
     background-color: white;
@@ -287,4 +310,34 @@ input {
 .total-grade-text {
     font-size: 24px;
     margin-left: 48px;
+}
+
+.loading-screen {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

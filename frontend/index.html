@@ -11,8 +11,18 @@
   </head>
 
   <body>
+    <div id="loading-screen" class="flex-col loading-screen">
+      <div class="loader"></div>
+    </div>
     <div class="flex-col root">
-      <div class="flex-row header">Guess my Score</div>
+      <div class="flex-row header">
+        Guess my Score
+
+        <div class="flex-row profile-view">
+          <div id="profile-text" class="flex-col profile-text"></div>
+          <div id="profile-image" class="profile-image"></div>
+        </div>
+      </div>
 
       <div class="flex-row top-bar">
         <div class="flex-row top-bar-button-container">
@@ -22,22 +32,21 @@
           </button>
         </div>
 
-        <button class="logout-button">Log Out</button>
+        <button id="login-button" class="authentication-button">Log In</button>
+        <button id="logout-button" class="authentication-button">
+          Log Out
+        </button>
       </div>
 
       <div class="flex-row main-container">
-        <div class="flex-col course-selector" id="course-selector">
-          <!-- TODO: pull data from api -->
-          <div class="year-display">Year 1</div>
-
-          <button class="flex-row course-button">
-            <div class="flex-row course-button-left">
-              <img src="images/globe_icon.png" alt="icon" />
-              Course 1
-            </div>
-            
-          </button>
-        </div>
+        <div
+          class="flex-col course-selector"
+          id="my-score-course-selector"
+        ></div>
+        <div
+          class="flex-col course-selector"
+          id="total-score-course-selector"
+        ></div>
 
         <div id="my-score-view" class="flex-col predict-score-view">
           <div class="flex-row course-title">
@@ -47,8 +56,7 @@
 
           <div class="predict-your-score-text">Predict Your Score</div>
 
-          <!-- TODO: pull data from api -->
-          <div class="flex-col score-item-list">
+          <div id="score-item-list" class="flex-col score-item-list">
             <div class="flex-row score-item">
               Item 1
               <div class="flex-row score-item-input">
@@ -64,25 +72,29 @@
 
           <div class="flex-row score-calculation-text">
             Current score:
-            <div class="orange-text">20</div>
-            / 100 as
-            <div class="orange-text">20</div>
+            <div id="checked-score" class="orange-text"></div>
+            /
+            <div id="max-checked-score" class="max-score-text"></div>
+            as
+            <div id="checked-score-percent" class="orange-text"></div>
             %
           </div>
 
           <div class="flex-row score-calculation-text">
             Unchecked score:
-            <div class="orange-text">75</div>
-            / 100 as
-            <div class="orange-text">75</div>
+            <div id="unchecked-score" class="orange-text"></div>
+            /
+            <div id="max-unchecked-score" class="max-score-text"></div>
+            as
+            <div id="unchecked-score-percent" class="orange-text"></div>
             %
           </div>
 
           <div class="flex-row score-calculation-text">
             Target score
-            <input type="number" />
+            <input id="target-score-input" type="number" />
             %: need to do
-            <div class="orange-text">80</div>
+            <div id="needed-unchecked-score" class="orange-text"></div>
             % of unchecked score
           </div>
         </div>
@@ -91,27 +103,7 @@
         <div id="total-score-view" class="total-score-view">
           <div class="calculation-grade-text">Calculation Grade</div>
 
-          <div class="flex-col grade-item-list">
-            <div class="flex-row grade-item">
-              <div class="flex-row grade-item-graphics">
-                <button class="grade-item-remove-button">
-                  <img alt="" src="images/uncheck.png"/>
-
-                </button>
-
-                <img src="images/globe_icon.png" alt="globe" />
-
-                Course 1
-              </div>
-
-              <div class="flex-row grade-item-input">
-                <div class="orange-text">20</div>
-                % / 100% Grade:
-                <input type="number" />
-                Credit:
-                <input type="number" />
-              </div>
-            </div>
+          <div id="grade-item-list" class="flex-col grade-item-list">
           </div>
 
           <div class="flex-row save-button-container">
@@ -125,7 +117,7 @@
             </div>
             <div class="flex-row total-grade-text">
               Your grade is:
-              <div class="orange-text">4.00</div>
+              <div id="total-grade" class="orange-text">4.00</div>
             </div>
           </div>
         </div>
