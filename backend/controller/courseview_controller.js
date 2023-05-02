@@ -79,7 +79,8 @@ exports.accessToken = (req, res) => {
 exports.logout = (req, res) => {
   const redirect = req.params.redirect;
   req.session.destroy();
-  res.redirect(redirect);
+  // res.redirect(redirect);
+  res.redirect("https://www.mycourseville.com/api/logout")
   res.end();
 };
 
