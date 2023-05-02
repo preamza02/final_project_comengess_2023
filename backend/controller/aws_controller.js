@@ -1,5 +1,9 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { PutCommand, ScanCommand } = require("@aws-sdk/lib-dynamodb");
+const {
+  PutCommand,
+  ScanCommand,
+  DeleteCommand,
+} = require("@aws-sdk/lib-dynamodb");
 const https = require("https");
 const docClient = new DynamoDBClient({ regions: "us-east-1" });
 
@@ -31,6 +35,7 @@ exports.getStarting = async (req, res) => {
         } else {
           j = j["data"];
         }
+        console.log(j);
         res.send(j);
         res.end();
       })
@@ -152,6 +157,7 @@ async function getAllCoursesWithDetails(access_token) {
       cv_cid: aa["cv_cid"].toString(),
       course_no: aa["course_no"],
       year: aa["year"],
+      semester: aa["semester"],
       is_selected: false,
       grade: 0.0,
       credit: 3.0,
@@ -187,7 +193,7 @@ async function getAllCoursesWithDetails(access_token) {
   });
   const groupedCourses = Object.values(
     concat2.reduce((acc, course) => {
-      var year = course.year; // calculate group number based on year
+      var year = course.year + "/" + course.semester; // calculate group number based on year
       if (!acc[year]) {
         acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
       }
@@ -197,3 +203,26 @@ async function getAllCoursesWithDetails(access_token) {
   );
   return groupedCourses;
 }
+const params = {
+  Key: { student_id: "6432174421" },
+  TableName: "course",
+};
+const data = docClient.send(new DeleteCommand(params));
+// AWS.config.update({ region: "us-east-1" });
+// const data2 = getcou("");
+// data2.then(console.log);
+
+exports.deletCourses = async (req, res) => {
+  const params = {
+    Key: { student_id: req.params.student_id },
+    TableName: "course",
+  };
+  try {
+    const data = await docClient.send(new DeleteCommand(params));
+    res.send(data);
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+};
