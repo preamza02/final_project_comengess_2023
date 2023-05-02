@@ -1,6 +1,6 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { PutCommand, ScanCommand } = require("@aws-sdk/lib-dynamodb");
-const { getPayload } = require("./item_controller");
+const https = require("https");
 const docClient = new DynamoDBClient({ regions: "us-east-1" });
 
 async function getcou(student_id) {
@@ -8,27 +8,31 @@ async function getcou(student_id) {
     TableName: "course",
   };
   j = {};
-  const data = await docClient.send(new ScanCommand(params)).Items;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i]["student_id"] === student_id) {
-      j = data[i];
+  const data = await docClient.send(new ScanCommand(params));
+  for (let i = 0; i < data.Items.length; i++) {
+    if (data.Items[i]["student_id"] === student_id) {
+      j = data.Items[i];
       break;
     }
   }
+  // console.log(data)
+  // console.log(j)
   return j;
 }
 
 exports.getStarting = async (req, res) => {
   try {
-    getAllCoursesWithDetails(req.session.token.access_token)
+     getAllCoursesWithDetails(req.session.token.access_token)
+    // getAllCoursesWithDetails("cpXGAO0iUlRvtK3acPLviRXWEKXzWqITDIBqtHtv")
       .then(async (courseDetails) => {
-        var j = await getcou(req.params.student_id)["data"];
+        var j = await getcou(req.params.student_id);
         if (Object.keys(j).length === 0) {
           j = courseDetails;
         } else {
           j = j["data"];
         }
         res.send(j);
+        res.end()
       })
       .catch((error) => console.error(error));
   } catch (err) {
@@ -49,6 +53,7 @@ exports.postCourses = async (req, res) => {
   try {
     const data = await docClient.send(new PutCommand(params));
     res.send(item);
+    res.end()
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -182,7 +187,8 @@ async function getAllCoursesWithDetails(access_token) {
   });
   const groupedCourses = Object.values(
     concat2.reduce((acc, course) => {
-      const year = parseInt(course.year) - 2020; // calculate group number based on year
+      var year = parseInt(course.year) - 2020; // calculate group number based on year
+      if (year<=0){year=0}
       if (!acc[year]) {
         acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
       }
