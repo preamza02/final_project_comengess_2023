@@ -47,7 +47,6 @@ const showLoadingScreen = (show) => {
 };
 
 // functions/data related to api
-const isProduction = false;
 const frontendIPAddress = "127.0.0.1:5500";
 const backendIPAddress = "127.0.0.1:3000";
 const redirect_url = encodeURIComponent(
@@ -60,92 +59,28 @@ const logout = async () => {
   window.location.href = `http://${backendIPAddress}/courseville/logout/${redirect_url}`;
 };
 const getProfile = async () => {
-  response = await fetch(`http://${backendIPAddress}/courseville/profile`, {
-    method: "GET",
-    credentials: "include",
-  });
-  result = await response.json();
+  const response = await fetch(
+    `http://${backendIPAddress}/courseville/profile`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  const result = await response.json();
   return result;
 };
 const getCourse = async (id) => {
-  return [
+  console.log("fetching " + id);
+  const response = await fetch(
+    `http://${backendIPAddress}/aws/get_course/${id}`,
     {
-      year: "1",
-      courses: [
-        {
-          name: "course1",
-          is_selected: false,
-          grade: 0.0,
-          credit: 0.0,
-          item_list: [
-            {
-              name: "item1",
-              score: 0,
-              max_score: 25,
-              percent: 25,
-            },
-            {
-              name: "item2",
-              score: 15,
-              max_score: 25,
-              percent: 25,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      year: "2",
-      courses: [
-        {
-          name: "course1",
-          is_selected: false,
-          grade: 0.0,
-          credit: 0.0,
-          item_list: [
-            {
-              name: "item1",
-              score: 0,
-              max_score: 35,
-              percent: 60,
-            },
-            {
-              name: "item2",
-              score: 9,
-              max_score: 50,
-              percent: 40,
-            },
-          ],
-        },
-        {
-          name: "course2",
-          is_selected: true,
-          grade: 0.0,
-          credit: 0.0,
-          item_list: [
-            {
-              name: "item1",
-              score: 0,
-              max_score: 35,
-              percent: 20,
-            },
-            {
-              name: "item2",
-              score: 12,
-              max_score: 50,
-              percent: 40,
-            },
-            {
-              name: "item3",
-              score: 15,
-              max_score: 50,
-              percent: 40,
-            },
-          ],
-        },
-      ],
-    },
-  ];
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  console.log(response);
+  const result = response.json();
+  return result;
 };
 
 // handle authentication
@@ -183,6 +118,7 @@ let selectedYearIndex = -1,
   selectedCourseIndex = -1;
 const scoreItemList = document.getElementById("score-item-list");
 const gradeItemList = document.getElementById("grade-item-list");
+const courseTitle = document.getElementById("course-title");
 const checkedScore = document.getElementById("checked-score");
 const maxCheckedScore = document.getElementById("max-checked-score");
 const checkedPercent = document.getElementById("checked-score-percent");
@@ -277,6 +213,11 @@ const setCurrentCourse = (yearIndex, courseIndex) => {
   }
   myScoreCourseButtons[yearIndex][courseIndex].style.outlineWidth = "2px";
 
+  courseTitle.innerHTML = `
+            <img src="${courseData[yearIndex].courses[courseIndex].course_icon}" alt="course" />
+            ${courseData[yearIndex].courses[courseIndex].name}
+  `;
+
   scoreItemList.innerHTML = ""; // clear children
   for (
     let i = 0;
@@ -311,6 +252,7 @@ const setCurrentCourse = (yearIndex, courseIndex) => {
     );
     inputDiv.appendChild(text2);
   }
+
   selectedYearIndex = yearIndex;
   selectedCourseIndex = courseIndex;
   calculateMyScore();
@@ -367,8 +309,8 @@ const setSelectedCourse = (
     graphics.appendChild(removeButton);
 
     const globe = document.createElement("img");
-    globe.src = "images/globe_icon.png";
-    globe.alt = "globe";
+    globe.src = item.course_icon;
+    globe.alt = "course";
     graphics.appendChild(globe);
 
     graphics.append(item.name);
@@ -451,7 +393,7 @@ const setCourseData = (courses) => {
       courseButton.style.outlineWidth = "0";
       courseButton.innerHTML = `
             <div class="flex-row course-button-left">
-              <img src="images/globe_icon.png" alt="icon" />
+              <img src="${course.course_icon}" alt="course" />
               ${course.name}
             </div>
       `;
@@ -466,7 +408,7 @@ const setCourseData = (courses) => {
       courseButton2.style.outlineWidth = "0";
       courseButton2.innerHTML = `
             <div class="flex-row course-button-left">
-              <img src="images/globe_icon.png" alt="icon" />
+              <img src="${course.course_icon}" alt="course" />
               ${course.name}
             </div>
       `;
@@ -498,6 +440,7 @@ const initialize = async () => {
     setProfile(profile);
 
     const courses = await getCourse(profile.student.id);
+    console.log(courses);
     setCourseData(courses);
   }
 
