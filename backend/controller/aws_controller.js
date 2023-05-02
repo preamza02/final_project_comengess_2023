@@ -23,7 +23,7 @@ async function getcou(student_id) {
 exports.getStarting = async (req, res) => {
   try {
     getAllCoursesWithDetails(req.session.token.access_token)
-      // getAllCoursesWithDetails("cpXGAO0iUlRvtK3acPLviRXWEKXzWqITDIBqtHtv")
+      // getAllCoursesWithDetails("ciw0MuPY1to8mbTAPP02Pv5B2o472R8EcDSP8kzY")
       .then(async (courseDetails) => {
         var j = await getcou(req.params.student_id);
         if (Object.keys(j).length === 0) {
@@ -68,7 +68,6 @@ async function getAllCoursesWithDetails(access_token) {
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
-            // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
           },
         },
         (response) => {
@@ -100,7 +99,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
@@ -128,7 +126,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
