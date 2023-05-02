@@ -47,7 +47,7 @@ const showLoadingScreen = (show) => {
 };
 
 // functions/data related to api
-const frontendIPAddress = "35.153.26.76:5500";
+const frontendIPAddress = "35.153.26.76";
 const backendIPAddress = "35.153.26.76:3000";
 const redirect_url = encodeURIComponent(
   `http://${frontendIPAddress}/frontend/index.html`
