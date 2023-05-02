@@ -1,8 +1,9 @@
-const express = require("express");
-const itemController = require("../controller/item_controller");
+// const express = require("express");
+// const itemController = require("../controller/item_controller");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/get_course/:id", itemController.getCourses);
+// router.get("/get_course/:student_id", itemController.getCourses);
+// router.post("/put_course/:student_id", itemController.postCourses);
 
-module.exports = router;
+// module.exports = router;
