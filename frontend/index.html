@@ -49,25 +49,17 @@
         ></div>
 
         <div id="my-score-view" class="flex-col predict-score-view">
-          <div class="flex-row course-title">
+          <div id="course-title" class="flex-row course-title">
             <img src="images/globe_icon.png" alt="icon" />
             Course 1
           </div>
 
           <div class="predict-your-score-text">Predict Your Score</div>
 
-          <div id="score-item-list" class="flex-col score-item-list">
-            <div class="flex-row score-item">
-              Item 1
-              <div class="flex-row score-item-input">
-                <input type="number" />
-                / 25 as 25%
-              </div>
-            </div>
-          </div>
+          <div id="score-item-list" class="flex-col score-item-list"></div>
 
           <div class="flex-row save-button-container">
-            <button class="save-button">Save</button>
+            <button id="my-score-save-button" class="save-button">Save</button>
           </div>
 
           <div class="flex-row score-calculation-text">
@@ -103,11 +95,10 @@
         <div id="total-score-view" class="total-score-view">
           <div class="calculation-grade-text">Calculation Grade</div>
 
-          <div id="grade-item-list" class="flex-col grade-item-list">
-          </div>
+          <div id="grade-item-list" class="flex-col grade-item-list"></div>
 
           <div class="flex-row save-button-container">
-            <button class="save-button">Save</button>
+            <button id="total-score-save-button" class="save-button">Save</button>
           </div>
 
           <div class="flex-col">
@@ -117,7 +108,7 @@
             </div>
             <div class="flex-row total-grade-text">
               Your grade is:
-              <div id="total-grade" class="orange-text">4.00</div>
+              <div id="total-grade" class="orange-text"></div>
             </div>
           </div>
         </div>

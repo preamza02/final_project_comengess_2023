@@ -1,5 +1,9 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { PutCommand, ScanCommand } = require("@aws-sdk/lib-dynamodb");
+const {
+  PutCommand,
+  ScanCommand,
+  DeleteCommand,
+} = require("@aws-sdk/lib-dynamodb");
 const https = require("https");
 const docClient = new DynamoDBClient({ regions: "us-east-1" });
 
@@ -22,8 +26,8 @@ async function getcou(student_id) {
 
 exports.getStarting = async (req, res) => {
   try {
-     getAllCoursesWithDetails(req.session.token.access_token)
-    // getAllCoursesWithDetails("cpXGAO0iUlRvtK3acPLviRXWEKXzWqITDIBqtHtv")
+    getAllCoursesWithDetails(req.session.token.access_token)
+      // getAllCoursesWithDetails("ciw0MuPY1to8mbTAPP02Pv5B2o472R8EcDSP8kzY")
       .then(async (courseDetails) => {
         var j = await getcou(req.params.student_id);
         if (Object.keys(j).length === 0) {
@@ -31,8 +35,9 @@ exports.getStarting = async (req, res) => {
         } else {
           j = j["data"];
         }
+        console.log(j);
         res.send(j);
-        res.end()
+        res.end();
       })
       .catch((error) => console.error(error));
   } catch (err) {
@@ -53,7 +58,7 @@ exports.postCourses = async (req, res) => {
   try {
     const data = await docClient.send(new PutCommand(params));
     res.send(item);
-    res.end()
+    res.end();
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -68,7 +73,6 @@ async function getAllCoursesWithDetails(access_token) {
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
-            // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
           },
         },
         (response) => {
@@ -100,7 +104,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
@@ -128,7 +131,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
@@ -155,6 +157,10 @@ async function getAllCoursesWithDetails(access_token) {
       cv_cid: aa["cv_cid"].toString(),
       course_no: aa["course_no"],
       year: aa["year"],
+      semester: aa["semester"],
+      is_selected: false,
+      grade: 0.0,
+      credit: 3.0,
     };
   });
   const allCourseB = allCourseDetails.map((aa) => {
@@ -187,8 +193,7 @@ async function getAllCoursesWithDetails(access_token) {
   });
   const groupedCourses = Object.values(
     concat2.reduce((acc, course) => {
-      var year = parseInt(course.year) - 2020; // calculate group number based on year
-      if (year<=0){year=0}
+      var year = course.year + "/" + course.semester; // calculate group number based on year
       if (!acc[year]) {
         acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
       }
@@ -198,3 +203,26 @@ async function getAllCoursesWithDetails(access_token) {
   );
   return groupedCourses;
 }
+const params = {
+  Key: { student_id: "6432174421" },
+  TableName: "course",
+};
+const data = docClient.send(new DeleteCommand(params));
+// AWS.config.update({ region: "us-east-1" });
+// const data2 = getcou("");
+// data2.then(console.log);
+
+exports.deletCourses = async (req, res) => {
+  const params = {
+    Key: { student_id: req.params.student_id },
+    TableName: "course",
+  };
+  try {
+    const data = await docClient.send(new DeleteCommand(params));
+    res.send(data);
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+};

@@ -86,7 +86,7 @@ input {
 
 .course-selector {
     background-color: #D9D9D9;
-    width: 25%;
+    width: 30%;
     height: 100%;
     overflow-y: auto;
     justify-items: center;
@@ -119,12 +119,14 @@ input {
 }
 
 .course-button-left {
+    font-size: 16px;
+    align-items: center;
     padding-left: 10px;
 }
 
 .course-button-left>img {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     margin-right: 10px;
 }
 
@@ -179,6 +181,10 @@ input {
     padding-bottom: 10px;
     padding-left: 28px;
     padding-right: 10px;
+}
+
+.score-item-input{
+    min-width: 220px;
 }
 
 .score-item-input>input {
@@ -249,7 +255,7 @@ input {
 
 .grade-item-list {
     height: 60%;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .grade-item {
@@ -264,8 +270,8 @@ input {
 }
 
 .grade-item-graphics {
+    min-width: 100px;
     align-items: center;
-    font-size: 24px;
 }
 
 .grade-item-graphics>img {
@@ -288,6 +294,15 @@ input {
 .grade-item-remove-button>img {
     width: 24px;
     height: 24px;
+}
+
+.grade-item{
+    min-width: 100%;
+    width: fit-content;
+}
+
+.grade-item-input{
+    min-width: 400px;
 }
 
 .grade-item-input>input {
