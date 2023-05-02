@@ -251,7 +251,7 @@ input {
 
 .grade-item-list {
     height: 60%;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .grade-item {
@@ -266,6 +266,7 @@ input {
 }
 
 .grade-item-graphics {
+    min-width: 100px;
     align-items: center;
 }
 
@@ -289,6 +290,15 @@ input {
 .grade-item-remove-button>img {
     width: 24px;
     height: 24px;
+}
+
+.grade-item{
+    min-width: 100%;
+    width: fit-content;
+}
+
+.grade-item-input{
+    min-width: 400px;
 }
 
 .grade-item-input>input {

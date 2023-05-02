@@ -70,7 +70,6 @@ const getProfile = async () => {
   return result;
 };
 const getCourse = async (id) => {
-  console.log("fetching " + id);
   const response = await fetch(
     `http://${backendIPAddress}/aws/get_course/${id}`,
     {
@@ -78,7 +77,6 @@ const getCourse = async (id) => {
       credentials: "include",
     }
   );
-  console.log(response);
   const result = response.json();
   return result;
 };
