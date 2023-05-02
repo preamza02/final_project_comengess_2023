@@ -49,9 +49,7 @@ const showLoadingScreen = (show) => {
 // functions/data related to api
 const frontendIPAddress = "35.153.26.76";
 const backendIPAddress = "35.153.26.76:3000";
-const redirect_url = encodeURIComponent(
-  `http://${frontendIPAddress}`
-);
+const redirect_url = encodeURIComponent(`http://${frontendIPAddress}`);
 const authorizeApplication = () => {
   window.location.href = `http://${backendIPAddress}/courseville/auth_app/${redirect_url}`;
 };
@@ -203,11 +201,12 @@ const calculateMyScore = () => {
     uncheckedPercentVal,
   } = calculateScore(selectedYearIndex, selectedCourseIndex);
 
+  let target = parseFloat(targetScoreInput.value) ?? 0;
+  target = Number.isNaN(target) ? 0 : target;
   if (uncheckedPercentVal === 0) {
-    neededUncheckedScore.textContent = "Infinity";
+    neededUncheckedScore.textContent =
+      checkedPercentVal < target ? "Infinity" : "0";
   } else {
-    let target = parseFloat(targetScoreInput.value) ?? 0;
-    target = Number.isNaN(target) ? 0 : target;
     const neededPercent =
       (Math.max(0, target - checkedPercentVal) / uncheckedPercentVal) * 100;
     neededUncheckedScore.textContent = round(neededPercent).toLocaleString();
