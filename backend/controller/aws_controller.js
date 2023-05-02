@@ -18,31 +18,25 @@ async function getcou(student_id) {
   return j;
 }
 
-// exports.getStarting = async (req, res) => {
-//   try {
-//     var j = getcou(req.params.student_id)["data"];
-//     if (j == {}) {
-//       j = getPayload(req);
-//     }
-//     res.send(j);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send(err);
-//   }
-// };
-
 exports.getStarting = async (req, res) => {
   try {
-    var j = getcou(req.params.student_id)["data"];
-    if (j == {}) {
-      j = getPayload(req);
-    }
-    res.send(j);
+    getAllCoursesWithDetails(req.session.token.access_token)
+      .then(async (courseDetails) => {
+        var j = await getcou(req.params.student_id)["data"];
+        if (Object.keys(j).length === 0) {
+          j = courseDetails;
+        } else {
+          j = j["data"];
+        }
+        res.send(j);
+      })
+      .catch((error) => console.error(error));
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
   }
 };
+
 exports.postCourses = async (req, res) => {
   const item = {
     student_id: req.params.student_id,
@@ -60,3 +54,141 @@ exports.postCourses = async (req, res) => {
     res.status(500).send(err);
   }
 };
+
+async function getAllCoursesWithDetails(access_token) {
+  const allCoursesPromise = new Promise((resolve, reject) => {
+    https
+      .get(
+        "https://www.mycourseville.com/api/v1/public/get/user/courses",
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
+          },
+        },
+        (response) => {
+          let data = "";
+          response.on("data", (chunk) => {
+            data += chunk;
+          });
+          response.on("end", () => {
+            const allCourses = JSON.parse(data);
+            resolve(allCourses);
+          });
+        }
+      )
+      .on("error", (error) => {
+        reject(error);
+      });
+  });
+  const allCourses = await allCoursesPromise;
+  const allCoursesID = allCourses["data"]["student"].map((allCourse) => {
+    return allCourse["cv_cid"];
+  });
+
+  const courseDetailsPromises = allCoursesID.map((course) => {
+    return new Promise((resolve, reject) => {
+      https
+        .get(
+          "https://www.mycourseville.com/api/v1/public/get/course/info?cv_cid=" +
+            course,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
+            },
+          },
+          (response) => {
+            let data = "";
+            response.on("data", (chunk) => {
+              data += chunk;
+            });
+            response.on("end", () => {
+              const courseDetail = JSON.parse(data);
+              courseDetail + resolve(courseDetail);
+            });
+          }
+        )
+        .on("error", (error) => {
+          reject(error);
+        });
+    });
+  });
+  const courseGradePromises = allCoursesID.map((course) => {
+    return new Promise((resolve, reject) => {
+      https
+        .get(
+          "https://www.mycourseville.com/api/v1/public/get/course/graded_items?cv_cid=" +
+            course,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
+            },
+          },
+          (response) => {
+            let data = "";
+            response.on("data", (chunk) => {
+              data += chunk;
+            });
+            response.on("end", () => {
+              const courseDetail = JSON.parse(data);
+              courseDetail + resolve(courseDetail);
+            });
+          }
+        )
+        .on("error", (error) => {
+          reject(error);
+        });
+    });
+  });
+  const allCourseDetails = await Promise.all(courseDetailsPromises);
+  const allCourseGrade = await Promise.all(courseGradePromises);
+
+  const allCourseA = allCourses["data"]["student"].map((aa) => {
+    return {
+      cv_cid: aa["cv_cid"].toString(),
+      course_no: aa["course_no"],
+      year: aa["year"],
+    };
+  });
+  const allCourseB = allCourseDetails.map((aa) => {
+    return {
+      cv_cid: aa["data"]["cv_cid"].toString(),
+      name: aa["data"]["title"],
+      course_icon: aa["data"]["course_icon"],
+    };
+  });
+  const allCourseC = allCourseGrade.map((aa) => {
+    return {
+      item_list: aa["data"].map((bb) => {
+        return {
+          name: bb["title"],
+          score: 0,
+          max_score: bb["raw_total"],
+          percent: bb["weight_in_group"],
+        };
+      }),
+    };
+  });
+
+  const concat = allCourseA.map((itemA, index) => {
+    const itemB = allCourseB[index];
+    return Object.assign({}, itemA, itemB);
+  });
+  const concat2 = concat.map((itemA, index) => {
+    const itemB = allCourseC[index];
+    return Object.assign({}, itemA, itemB);
+  });
+  const groupedCourses = Object.values(
+    concat2.reduce((acc, course) => {
+      const year = parseInt(course.year) - 2020; // calculate group number based on year
+      if (!acc[year]) {
+        acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
+      }
+      acc[year].courses.push(course); // add the course to the group
+      return acc;
+    }, {})
+  );
+  return groupedCourses;
+}
