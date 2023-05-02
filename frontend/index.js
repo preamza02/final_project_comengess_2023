@@ -50,7 +50,7 @@ const showLoadingScreen = (show) => {
 const frontendIPAddress = "35.153.26.76";
 const backendIPAddress = "35.153.26.76:3000";
 const redirect_url = encodeURIComponent(
-  `http://${frontendIPAddress}/frontend/index.html`
+  `http://${frontendIPAddress}`
 );
 const authorizeApplication = () => {
   window.location.href = `http://${backendIPAddress}/courseville/auth_app/${redirect_url}`;
