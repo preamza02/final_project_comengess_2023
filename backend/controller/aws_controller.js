@@ -187,10 +187,7 @@ async function getAllCoursesWithDetails(access_token) {
   });
   const groupedCourses = Object.values(
     concat2.reduce((acc, course) => {
-      var year = parseInt(course.year) - 2020; // calculate group number based on year
-      if (year <= 0) {
-        year = 0;
-      }
+      var year = course.year; // calculate group number based on year
       if (!acc[year]) {
         acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
       }
