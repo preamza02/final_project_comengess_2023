@@ -318,13 +318,15 @@ input {
     font-size: 24px;
 }
 
-.party-popper-emoji-text {
-    font-size: 36px;
+.congratulations-text > img {
+    width: 44px;
+    height: 44px;
+    margin-right: 8px;
 }
 
 .total-grade-text {
     font-size: 24px;
-    margin-left: 48px;
+    margin-left: 54px;
 }
 
 .loading-screen {
