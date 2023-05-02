@@ -183,6 +183,10 @@ input {
     padding-right: 10px;
 }
 
+.score-item-input{
+    min-width: 220px;
+}
+
 .score-item-input>input {
     align-items: center;
     width: 56px;

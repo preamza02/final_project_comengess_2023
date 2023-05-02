@@ -80,6 +80,22 @@ const getCourse = async (id) => {
   const result = response.json();
   return result;
 };
+const saveCourse = async (id, data) => {
+  const response = await fetch(
+    `http://${backendIPAddress}/aws/update_course/${id}`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  console.log("uploading", JSON.stringify(data));
+  return response;
+};
 
 // handle authentication
 const logoutButton = document.getElementById("logout-button");
@@ -110,6 +126,7 @@ const setProfile = (profile) => {
 
 // update course data
 let courseData;
+let userProfile;
 let myScoreCourseButtons = {};
 let totalScoreComponents = {};
 let selectedYearIndex = -1,
@@ -128,6 +145,21 @@ const neededUncheckedScore = document.getElementById("needed-unchecked-score");
 const totalGrade = document.getElementById("total-grade");
 // perform calculations every time target score changes
 targetScoreInput.oninput = () => calculateMyScore();
+
+// saving courses data to db
+const myScoreSaveButton = document.getElementById("my-score-save-button");
+const totalScoreSaveButton = document.getElementById("total-score-save-button");
+const saveData = async () => {
+  showLoadingScreen(true);
+
+  await saveCourse(userProfile.student.id, courseData);
+  alert("Finished saving data!");
+
+  showLoadingScreen(false);
+};
+myScoreSaveButton.onclick = () => saveData();
+totalScoreSaveButton.onclick = () => saveData();
+
 const calculateScore = (yearIndex, courseIndex) => {
   let maxScore = 0,
     maxPercentScore = 0,
@@ -420,7 +452,6 @@ const setCourseData = (courses) => {
     }
   }
 
-  console.log(myScoreCourseButtons);
   setCurrentCourse(0, 0);
   calculateMyScore();
   calculateGrade();
@@ -432,17 +463,14 @@ const initialize = async () => {
 
   setView(MY_SCORE_VIEW);
 
-  const profile = await getProfile();
-  setIsLoggedIn(profile.is_login);
-  if (profile.is_login) {
-    setProfile(profile);
+  userProfile = await getProfile();
+  setIsLoggedIn(userProfile.is_login);
+  if (userProfile.is_login) {
+    setProfile(userProfile);
 
-    const courses = await getCourse(profile.student.id);
-    console.log(courses);
+    const courses = await getCourse(userProfile.student.id);
     setCourseData(courses);
   }
-
-  console.log(profile);
 
   showLoadingScreen(false);
 };
