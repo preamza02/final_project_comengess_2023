@@ -22,8 +22,8 @@ async function getcou(student_id) {
 
 exports.getStarting = async (req, res) => {
   try {
-     getAllCoursesWithDetails(req.session.token.access_token)
-    // getAllCoursesWithDetails("cpXGAO0iUlRvtK3acPLviRXWEKXzWqITDIBqtHtv")
+    getAllCoursesWithDetails(req.session.token.access_token)
+      // getAllCoursesWithDetails("ciw0MuPY1to8mbTAPP02Pv5B2o472R8EcDSP8kzY")
       .then(async (courseDetails) => {
         var j = await getcou(req.params.student_id);
         if (Object.keys(j).length === 0) {
@@ -32,7 +32,7 @@ exports.getStarting = async (req, res) => {
           j = j["data"];
         }
         res.send(j);
-        res.end()
+        res.end();
       })
       .catch((error) => console.error(error));
   } catch (err) {
@@ -53,7 +53,7 @@ exports.postCourses = async (req, res) => {
   try {
     const data = await docClient.send(new PutCommand(params));
     res.send(item);
-    res.end()
+    res.end();
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -68,7 +68,6 @@ async function getAllCoursesWithDetails(access_token) {
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
-            // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
           },
         },
         (response) => {
@@ -100,7 +99,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
@@ -128,7 +126,6 @@ async function getAllCoursesWithDetails(access_token) {
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
-              // Authorization: `Bearer wePZVFRsbCcEXwV8ssKvHjHqHhfGXDWMAoiopkrb`,
             },
           },
           (response) => {
@@ -155,6 +152,9 @@ async function getAllCoursesWithDetails(access_token) {
       cv_cid: aa["cv_cid"].toString(),
       course_no: aa["course_no"],
       year: aa["year"],
+      is_selected: false,
+      grade: 0.0,
+      credit: 3.0,
     };
   });
   const allCourseB = allCourseDetails.map((aa) => {
@@ -188,7 +188,9 @@ async function getAllCoursesWithDetails(access_token) {
   const groupedCourses = Object.values(
     concat2.reduce((acc, course) => {
       var year = parseInt(course.year) - 2020; // calculate group number based on year
-      if (year<=0){year=0}
+      if (year <= 0) {
+        year = 0;
+      }
       if (!acc[year]) {
         acc[year] = { year, courses: [] }; // initialize the group if it doesn't exist
       }
